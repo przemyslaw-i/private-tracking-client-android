@@ -1,12 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="app_name">Traccar Client</string>
-  <string name="app_logo">Traccar</string>
-  <string name="shortcut_start">Start service</string>
-  <string name="shortcut_stop">Stop service</string>
-  <string name="shortcut_sos">Send SOS</string>
+  <string name="app_name">Private Tracking Client</string>
+  <string name="app_logo">Tracking</string>
   <string name="channel_default">Primary Channel</string>
-  <string name="settings_id_title">Device identifier</string>
+  <string name="secret_string_title">Token</string>
+  <string name="secret_string_summary">Server authorization token</string>
   <string name="settings_url_title">Server URL</string>
   <string name="settings_url_summary">Tracking server URL</string>
   <string name="settings_interval_title">Frequency</string>
@@ -18,8 +16,8 @@
   <string name="settings_status_title">Service status</string>
   <string name="settings_status_off">Start</string>
   <string name="settings_status_on">Stop</string>
-  <string name="settings_status_off_summary">Service stopped</string>
-  <string name="settings_status_on_summary">Service running</string>
+  <string name="settings_status_off_summary">Tracking stopped</string>
+  <string name="settings_status_on_summary">Tracking running</string>
   <string name="settings_buffer">Offline buffering</string>
   <string name="settings_buffer_off_summary">Buffering off</string>
   <string name="settings_buffer_on_summary">Buffering on</string>
@@ -34,18 +32,16 @@
   <string name="settings_foreground_title">Foreground service</string>
   <string name="settings_foreground_summary">Increase service priority</string>
   <string name="menu_status">Status</string>
-  <string name="menu_info">Info</string>
   <string name="menu_shortcuts">Add shortcuts</string>
   <string name="menu_clear">Clear</string>
-  <string name="status_service_create">Service started</string>
-  <string name="status_service_destroy">Service stopped</string>
+  <string name="status_service_create">Tracking started</string>
+  <string name="status_service_destroy">Tracking stopped</string>
   <string name="status_send_success">Send successfully</string>
   <string name="status_send_fail">Send failed</string>
   <string name="status_location_update">Location update</string>
   <string name="status_network_online">Network online</string>
   <string name="status_network_offline">Network offline</string>
   <string name="hidden_app_name">Device Settings</string>
-  <string name="hidden_alert">The app has been hidden. To open it again please dial 8722227 (TRACCAR).</string>
   <string name="error_msg_invalid_url">Please enter a valid http:// or https:// URL</string>
   <string name="request_exception">To continuously collect location data please turn off battery optimization for the app.</string>
   <string name="request_background">To continuously collect location data please enable \"%s\" permission.</string>

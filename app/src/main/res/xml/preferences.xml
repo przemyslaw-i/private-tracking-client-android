@@ -11,8 +11,9 @@
         android:title="@string/settings_status_title" />
 
     <EditTextPreference
-        android:key="id"
-        android:title="@string/settings_id_title" />
+        android:key="secret"
+        android:title="@string/secret_string_title"
+        android:summary="@string/secret_string_summary" />
 
     <EditTextPreference
         android:defaultValue="@string/settings_url_default_value"

@@ -1,14 +1,30 @@
-# [Traccar Client for Android](https://www.traccar.org/client)
-
-[![Get it on Google Play](http://www.tananaev.com/badges/google-play.svg)](https://play.google.com/store/apps/details?id=org.traccar.client) [![Get it on F-Droid](http://www.tananaev.com/badges/f-droid.svg)](https://f-droid.org/repository/browse/?fdid=org.traccar.client)
+# Private Tracking Client
 
 ## Overview
 
-Traccar Client is an Android GPS tracking application. It can work with Traccar open source server software.
+This is an Android GPS tracking application, that is based on Traccar software.
 
 ## Team
 
+Team:
+- Przemyslaw I.
+
+Traccar original team:
 - Anton Tananaev ([anton@traccar.org](mailto:anton@traccar.org))
+
+## Major changes to the original software
+
+* Removed Google Analytics
+* Removed Shortcut
+* Removed Autostart
+* Removed Tests (who does that) ;)
+* Change application name
+* Changed icons
+* Removed DialLaunchReceiver
+* Removed translations (only EN left)
+* Info removed
+* Remove possibility to hide the app
+* Changed way, that data it sent
 
 ## License
 
