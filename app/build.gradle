@@ -51,18 +51,3 @@ dependencies {
     }
 }
 
-if (getGradle().getStartParameter().getTaskRequests().toString().contains('Google')) {
-    apply plugin: 'com.google.gms.google-services'
-    apply plugin: 'com.google.firebase.crashlytics'
-
-    task copyJson(type: Copy) {
-        from '../../environment/google-services'
-        into '.'
-        include 'tracking-client-android.json'
-        rename('tracking-client-android.json', 'google-services.json')
-    }
-
-    afterEvaluate {
-        preBuild.dependsOn copyJson
-    }
-}

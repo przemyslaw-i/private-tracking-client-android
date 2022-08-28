@@ -1,5 +1,6 @@
 package priv.tracking.client
 
+import org.json.JSONObject
 import java.io.PrintWriter
 
 data class Request(
@@ -8,29 +9,26 @@ data class Request(
     val secret: String?
 ) {
     fun writePositionToPrintWriter(writer: PrintWriter) {
-        val id = position.id.toString()
-        val timestamp = (position.time.time / 1000).toString()
-        val lat = position.latitude.toString()
-        val lon =  position.longitude.toString()
-        val speed = position.speed.toString()
-        val bearing = position.course.toString()
-        val altitude = position.altitude.toString()
-        val accuracy = position.accuracy.toString()
-        val batt = position.battery.toString()
-
-        var params = "id=$id&ts=$timestamp&lat=$lat&lon=$lon&spd=$speed&ber=$bearing&alt=$altitude&acc=$accuracy&batt=$batt"
+        val json = JSONObject()
+        json.put("id", position.id.toString())
+        json.put("ts", (position.time.time / 1000).toString())
+        json.put("lat", position.latitude.toString())
+        json.put("lon", position.longitude.toString())
+        json.put("spd", position.speed.toString())
+        json.put("ber", position.course.toString())
+        json.put("alt", position.altitude.toString())
+        json.put("acc", position.accuracy.toString())
+        json.put("batt", position.battery.toString())
 
         if (position.charging) {
-            val charge = position.charging.toString()
-            params += "&chrg=$charge"
+            json.put("chrg", position.charging.toString())
         }
 
         if (position.mock) {
-            val mock = position.mock.toString()
-            params += "&mock=$mock"
+            json.put("mock", position.mock.toString())
         }
 
-        writer.append(params)
+        writer.append(json.toString())
         writer.flush()
     }
 }

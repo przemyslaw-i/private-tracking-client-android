@@ -22,6 +22,7 @@ import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStreamWriter
 import java.io.PrintWriter
+import java.lang.Math.log
 import java.net.HttpURLConnection
 import java.net.URL
 
@@ -46,7 +47,7 @@ object RequestManager {
             connection.setRequestProperty("Authorization", "Bearer "+request.secret)
 
             // Add multipart data
-            connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded")
+            connection.setRequestProperty("Content-Type", "application/json")
             val writer = PrintWriter(OutputStreamWriter(connection.outputStream, CHARSET), true)
             request.writePositionToPrintWriter(writer)
 

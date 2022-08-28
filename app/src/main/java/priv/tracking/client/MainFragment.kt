@@ -17,7 +17,6 @@ package priv.tracking.client
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
@@ -51,8 +50,6 @@ import kotlin.collections.HashSet
 class MainFragment : PreferenceFragmentCompat(), OnSharedPreferenceChangeListener {
 
     private lateinit var sharedPreferences: SharedPreferences
-    private lateinit var alarmManager: AlarmManager
-    private lateinit var alarmIntent: PendingIntent
     private var requestingPermissions: Boolean = false
 
     @SuppressLint("UnspecifiedImmutableFlag")
@@ -222,12 +219,6 @@ class MainFragment : PreferenceFragmentCompat(), OnSharedPreferenceChangeListene
         if (permission) {
             setPreferencesEnabled(false)
             ContextCompat.startForegroundService(requireContext(), Intent(activity, TrackingService::class.java))
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
-                alarmManager.setInexactRepeating(
-                    AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                    ALARM_MANAGER_INTERVAL.toLong(), ALARM_MANAGER_INTERVAL.toLong(), alarmIntent
-                )
-            }
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
                 && ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_BACKGROUND_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -246,9 +237,6 @@ class MainFragment : PreferenceFragmentCompat(), OnSharedPreferenceChangeListene
     }
 
     private fun stopTrackingService() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
-            alarmManager.cancel(alarmIntent)
-        }
         requireActivity().stopService(Intent(activity, TrackingService::class.java))
         setPreferencesEnabled(true)
     }
