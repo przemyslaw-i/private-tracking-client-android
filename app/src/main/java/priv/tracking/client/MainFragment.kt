@@ -17,7 +17,6 @@ package priv.tracking.client
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -37,15 +36,9 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
-import androidx.preference.EditTextPreference
-import androidx.preference.EditTextPreferenceDialogFragmentCompat
-import androidx.preference.Preference
-import androidx.preference.PreferenceFragmentCompat
-import androidx.preference.PreferenceManager
-import androidx.preference.TwoStatePreference
+import androidx.preference.*
 import dev.doubledot.doki.ui.DokiActivity
 import java.util.*
-import kotlin.collections.HashSet
 
 class MainFragment : PreferenceFragmentCompat(), OnSharedPreferenceChangeListener {
 
@@ -59,9 +52,6 @@ class MainFragment : PreferenceFragmentCompat(), OnSharedPreferenceChangeListene
         setPreferencesFromResource(R.xml.preferences, rootKey)
         initPreferences()
 
-        findPreference<Preference>(KEY_DEVICE)?.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
-            newValue != null && newValue != ""
-        }
         findPreference<Preference>(KEY_URL)?.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
             newValue != null && validateServerURL(newValue.toString())
         }
@@ -81,11 +71,14 @@ class MainFragment : PreferenceFragmentCompat(), OnSharedPreferenceChangeListene
                 false
             }
         }
-        findPreference<Preference>(KEY_DISTANCE)?.onPreferenceChangeListener = numberValidationListener
-        findPreference<Preference>(KEY_ANGLE)?.onPreferenceChangeListener = numberValidationListener
 
         if (sharedPreferences.getBoolean(KEY_STATUS, false)) {
             startTrackingService(checkPermission = true, initialPermission = false)
+        }
+
+        val allEntries = sharedPreferences.all
+        for ((key, value) in allEntries) {
+            Log.d("map values", key + ": " + value.toString())
         }
     }
 
@@ -110,7 +103,7 @@ class MainFragment : PreferenceFragmentCompat(), OnSharedPreferenceChangeListene
 
     @Suppress("DEPRECATION")
     override fun onDisplayPreferenceDialog(preference: Preference) {
-        if (listOf(KEY_INTERVAL, KEY_DISTANCE, KEY_ANGLE).contains(preference.key)) {
+        if (listOf(KEY_INTERVAL).contains(preference.key)) {
             val f: EditTextPreferenceDialogFragmentCompat =
                 NumericEditTextPreferenceDialogFragment.newInstance(preference.key)
             f.setTargetFragment(this, 0)
@@ -138,14 +131,9 @@ class MainFragment : PreferenceFragmentCompat(), OnSharedPreferenceChangeListene
     }
 
     private fun setPreferencesEnabled(enabled: Boolean) {
-        findPreference<Preference>(KEY_DEVICE)?.isEnabled = enabled
         findPreference<Preference>(KEY_URL)?.isEnabled = enabled
+        findPreference<Preference>(KEY_BIB)?.isEnabled = enabled
         findPreference<Preference>(KEY_SECRET)?.isEnabled = enabled
-        findPreference<Preference>(KEY_INTERVAL)?.isEnabled = enabled
-        findPreference<Preference>(KEY_DISTANCE)?.isEnabled = enabled
-        findPreference<Preference>(KEY_ANGLE)?.isEnabled = enabled
-        findPreference<Preference>(KEY_ACCURACY)?.isEnabled = enabled
-        findPreference<Preference>(KEY_BUFFER)?.isEnabled = enabled
         findPreference<Preference>(KEY_WAKELOCK)?.isEnabled = enabled
     }
 
@@ -157,8 +145,6 @@ class MainFragment : PreferenceFragmentCompat(), OnSharedPreferenceChangeListene
                 stopTrackingService()
             }
             (requireActivity().application as MainApplication).handleRatingFlow(requireActivity())
-        } else if (key == KEY_DEVICE) {
-            findPreference<Preference>(KEY_DEVICE)?.summary = sharedPreferences.getString(KEY_DEVICE, null)
         }
     }
 
@@ -180,12 +166,28 @@ class MainFragment : PreferenceFragmentCompat(), OnSharedPreferenceChangeListene
 
     private fun initPreferences() {
         PreferenceManager.setDefaultValues(requireActivity(), R.xml.preferences, false)
-        if (!sharedPreferences.contains(KEY_DEVICE)) {
-            val id = (Random().nextInt(900000) + 100000).toString()
-            sharedPreferences.edit().putString(KEY_DEVICE, id).apply()
-            findPreference<EditTextPreference>(KEY_DEVICE)?.text = id
+
+        val editor = sharedPreferences.edit()
+
+        if (!sharedPreferences.contains(KEY_INTERVAL)) {
+            val default = getString(R.string.settings_interval_default_value)
+            editor.putString(KEY_INTERVAL, default)
+            findPreference<Preference>(KEY_INTERVAL)?.summary = default
         }
-        findPreference<Preference>(KEY_DEVICE)?.summary = sharedPreferences.getString(KEY_DEVICE, null)
+
+        if (!sharedPreferences.contains(KEY_ACCURACY)) {
+            val default = getString(R.string.settings_accuracy_default_value)
+            editor.putString(KEY_ACCURACY, default)
+            findPreference<Preference>(KEY_ACCURACY)?.summary = default
+        }
+
+        if (!sharedPreferences.contains(KEY_BUFFER)) {
+            val default = getString(R.string.settings_buffer_default_value)
+            editor.putBoolean(KEY_BUFFER, default.toBoolean())
+            findPreference<Preference>(KEY_BUFFER)?.summary = default
+        }
+
+        editor.apply()
     }
 
     private fun showBackgroundLocationDialog(context: Context, onSuccess: () -> Unit) {
@@ -270,12 +272,10 @@ class MainFragment : PreferenceFragmentCompat(), OnSharedPreferenceChangeListene
     companion object {
         private val TAG = MainFragment::class.java.simpleName
         private const val ALARM_MANAGER_INTERVAL = 15000
-        const val KEY_DEVICE = "id"
         const val KEY_URL = "url"
+        const val KEY_BIB = "bib"
         const val KEY_SECRET = "secret"
         const val KEY_INTERVAL = "interval"
-        const val KEY_DISTANCE = "distance"
-        const val KEY_ANGLE = "angle"
         const val KEY_ACCURACY = "accuracy"
         const val KEY_STATUS = "status"
         const val KEY_BUFFER = "buffer"

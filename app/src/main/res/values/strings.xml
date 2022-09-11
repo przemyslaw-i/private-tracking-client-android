@@ -3,10 +3,12 @@
   <string name="app_name">Private Tracking Client</string>
   <string name="app_logo">Tracking</string>
   <string name="channel_default">Primary Channel</string>
-  <string name="secret_string_title">Token</string>
-  <string name="secret_string_summary">Server authorization token</string>
   <string name="settings_url_title">Server URL</string>
   <string name="settings_url_summary">Tracking server URL</string>
+  <string name="settings_bib_title">Bib</string>
+  <string name="settings_bib_summary">Your bib number</string>
+  <string name="settings_token_title">Token</string>
+  <string name="settings_token_summary">Authorization token</string>
   <string name="settings_interval_title">Frequency</string>
   <string name="settings_interval_summary">Reporting interval in seconds</string>
   <string name="settings_distance_title">Distance</string>

@@ -147,9 +147,10 @@ class TrackingController(private val context: Context) : PositionListener, Netwo
 
     private fun send(position: Position) {
         log("send", position)
-        val url = preferences.getString(MainFragment.KEY_URL, "")
-        val secret = preferences.getString(MainFragment.KEY_SECRET, "")
-        val request = Request(url, position, secret)
+        val urlBase = preferences.getString(MainFragment.KEY_URL, "").toString()
+        val bib = preferences.getString(MainFragment.KEY_BIB, "").toString()
+        val token = preferences.getString(MainFragment.KEY_SECRET, "").toString()
+        val request = Request(position, urlBase, bib, token)
 
         sendRequestAsync(request, object : RequestHandler {
             override fun onComplete(success: Boolean) {

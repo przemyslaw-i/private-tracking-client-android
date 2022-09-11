@@ -2,6 +2,11 @@
 <resources>
 
     <string name="settings_url_default_value" translatable="false">http://10.0.2.2:6666</string>
+    <string name="settings_interval_default_value" translatable="false">45</string>
+    <string name="settings_distance_default_value" translatable="false">0</string>
+    <string name="settings_angle_default_value" translatable="false">0</string>
+    <string name="settings_accuracy_default_value" translatable="false">high</string>
+    <string name="settings_buffer_default_value" translatable="false">false</string>
 
     <string-array name="settings_accuracy_values" translatable="false">
         <item>high</item>

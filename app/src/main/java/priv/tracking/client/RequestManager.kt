@@ -18,24 +18,32 @@ package priv.tracking.client
 
 import android.os.AsyncTask
 import android.util.Log
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.preference.PreferenceManager
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStreamWriter
 import java.io.PrintWriter
-import java.lang.Math.log
+import java.math.BigInteger
 import java.net.HttpURLConnection
 import java.net.URL
+import java.security.MessageDigest
 
 object RequestManager {
 
     private const val TIMEOUT = 15 * 1000
     private const val CHARSET = "utf-8"
 
+    fun String.sha256(): String {
+        val bytes = MessageDigest.getInstance("SHA-256").digest(toByteArray())
+        return BigInteger(1, bytes).toString(16).padStart(64, '0')
+    }
+
     fun sendRequest(request: Request): Boolean {
         var inputStream: InputStream? = null
         return try {
             // Prepare URL
-            val url = URL(request.url)
+            val url = URL("${request.urlBase}/bib/position")
 
             // Make the connection
             val connection = url.openConnection() as HttpURLConnection
@@ -44,7 +52,8 @@ object RequestManager {
             connection.requestMethod = "POST"
 
             // Add auth
-            connection.setRequestProperty("Authorization", "Bearer "+request.secret)
+            val bearer = "Bearer ${request.bib}:${request.token.sha256()}"
+            connection.setRequestProperty("Authorization", bearer)
 
             // Add multipart data
             connection.setRequestProperty("Content-Type", "application/json")

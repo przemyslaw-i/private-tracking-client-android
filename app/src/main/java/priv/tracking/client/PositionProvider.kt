@@ -36,9 +36,7 @@ abstract class PositionProvider(
     }
 
     protected var preferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-    protected var interval = preferences.getString(MainFragment.KEY_INTERVAL, "600")!!.toLong() * 1000
-    protected var distance: Double = preferences.getString(MainFragment.KEY_DISTANCE, "0")!!.toInt().toDouble()
-    protected var angle: Double = preferences.getString(MainFragment.KEY_ANGLE, "0")!!.toInt().toDouble()
+    protected var interval = preferences.getString(MainFragment.KEY_INTERVAL, context.getString(R.string.settings_interval_default_value))!!.toLong() * 1000
     private var lastLocation: Location? = null
 
     abstract fun startUpdates()
@@ -47,9 +45,7 @@ abstract class PositionProvider(
 
     protected fun processLocation(location: Location?) {
         if (location != null &&
-            (lastLocation == null || location.time - lastLocation!!.time >= interval || distance > 0
-                    && location.distanceTo(lastLocation) >= distance || angle > 0
-                    && abs(location.bearing - lastLocation!!.bearing) >= angle)
+            (lastLocation == null || location.time - lastLocation!!.time >= interval)
         ) {
             Log.i(TAG, "location new")
             lastLocation = location
@@ -75,7 +71,6 @@ abstract class PositionProvider(
 
     companion object {
         private val TAG = PositionProvider::class.java.simpleName
-        const val MINIMUM_INTERVAL: Long = 1000
     }
 
 }
